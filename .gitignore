@@ -11,8 +11,6 @@ doc/
 lib/bundler/man
 pkg
 rdoc
-spec/support/spec_csv_output.csv
-spec/support/emit_spec_csv_output.csv
 test/tmp
 test/version_tmp
 tmp

@@ -1,0 +1,3 @@
+url,location,code,result_location,result_code,pass
+http://example.com/304/url,http://example.com/304/target,302,http://example.com/304/target,302,true
+http://example.com/200,http://example.com/200,200,http://example.com/200,200,true
