@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+require 'rectory'
+require 'csv'
+require 'yaml'
+require 'optparse'
+
+Celluloid.logger = nil
+
+options = {}
+
+opt_parser = OptionParser.new do |opt|
+  opt.banner = "Rectory"
+  opt.separator  ""
+  opt.separator  "rectory [CSV FILE] [OPTIONS] --- Verfify redirects within a CSV spreadsheet"
+  opt.separator  "rectory scaffold [OPTIONS]   --- Build a template CSV for testing redirects"
+  opt.separator  ""
+  opt.separator  "Options"
+
+  opt.on("-o","--output OUTPUT","where do you want the results/scaffold to be written?") do |o|
+    options[:output] = o
+  end
+
+  opt.on("-h","--help","help")
+end
+
+opt_parser.parse!
+
+case ARGV[0]
+
+when "scaffold"
+  output = "sample_redirects.csv"
+  output = options[:output] unless options[:output].blank?
+
+  CSV.open(output, "wb") do |csv|
+    csv << ["url","location","code"]
+    csv << ["http://google.com","http://www.google.com",301]
+    csv << ["http://www.google.com","http://www.google.com",200]
+  end
+  puts "Scaffolded CSV at: #{output}"
+
+when "help", nil
+  puts opt_parser
+
+else
+  output       = "results_#{ARGV[0]}"
+  output       = options[:output] unless options[:output].nil?
+  expectations = []
+  CSV.foreach(ARGV[0]) do |row|
+    expectations << Rectory::Expectation.new(row[0], :location => row[1], :code => row[2].to_i)
+  end
+  expectations.shift
+  results = Rectory.verify expectations
+  Rectory::CsvOutputter.write results, output
+end
+
