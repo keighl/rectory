@@ -16,7 +16,8 @@ Gem::Specification.new do |gem|
     "lib/rectory/version.rb"
   ]
 
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.executables   = %w{rectory}
+
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "rectory"
   gem.require_paths = ["lib"]
