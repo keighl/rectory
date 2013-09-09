@@ -38,10 +38,6 @@ The easiest way to run a redirect test is using a CSV spreadsheet.
 * `location` - Where the URL should redirect. If the request should not redirect (for instance, a 200 code), leave it blank
 * `code` - The HTTP status code the request should return
 
-url,location,code
-http://google.com,http://www.google.com,301
-http://www.google.com,,200
-
 <table>
   <thead>
     <tr>
