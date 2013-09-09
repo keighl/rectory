@@ -3,6 +3,8 @@
 .bundle
 .config
 .yardoc
+new_rectory_redirects.csv
+results_new_rectory_redirects.csv
 Gemfile.lock
 InstalledFiles
 _yardoc
@@ -14,3 +16,4 @@ rdoc
 test/tmp
 test/version_tmp
 tmp
+spec/support/emit_spec_csv_output.csv

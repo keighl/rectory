@@ -4,15 +4,14 @@ require File.expand_path('../lib/rectory/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Kyle Truscott"]
   gem.email         = ["keighl@keighl.com"]
-  gem.description   = %q{Test expected HTTP repsonse codes/locations.}
-  gem.summary       = %q{Have a ton of redirects to test? Use this. Rectory will make a bunch of requests for you, and tell you what happened: status code, location, and whether it behaved as expected. Oh, and you can use a spreadsheet. }
+  gem.description   = %q{Quickly test HTTP redirects and status codes.}
+  gem.summary       = %q{HHave a ton of HTTP redirects, and need to verify they're working? Use this. Give rectory a list of live HTTP expectations, and it'll tell you what happens: status code, location, and whether it behaved as expected (i.e pass/fail).}
   gem.homepage      = "https://github.com/keighl/rectory"
 
   gem.files         = [
     "lib/rectory.rb",
-    "lib/rectory/verifier.rb",
+    "lib/rectory/request.rb",
     "lib/rectory/csv_outputter.rb",
-    "lib/rectory/result.rb",
     "lib/rectory/expectation.rb",
     "lib/rectory/version.rb"
   ]

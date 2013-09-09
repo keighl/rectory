@@ -4,14 +4,14 @@ describe Rectory::CsvOutputter do
 
   let(:expectations) {
     [
-      Rectory::Expectation.new("http://example.com/304/url", {
-        :location => "http://example.com/304/target",
+      Rectory::Expectation.new("http://example.com/302/url", {
+        :location => "http://example.com/302/target",
         :code     => 302,
-        :result   => Rectory::Result.new(:location => "http://example.com/304/target", :code => 302)
+        :result   => { :location => "http://example.com/302/target", :code => 302 }
       }),
       Rectory::Expectation.new("http://example.com/200", {
         :code     => 200,
-        :result   => Rectory::Result.new(:code => 200, :location => "http://example.com/200")
+        :result   => { :code => 200 }
       })
     ]
   }

@@ -1,3 +1,0 @@
-url,location,code,result_location,result_code,pass
-http://google.com,http://www.google.com,301,http://www.google.com/,301,true
-http://www.google.com,"",200,"",200,true

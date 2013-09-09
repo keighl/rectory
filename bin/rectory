@@ -12,8 +12,8 @@ options = {}
 opt_parser = OptionParser.new do |opt|
   opt.banner = "Rectory"
   opt.separator  ""
-  opt.separator  "rectory [CSV FILE] [OPTIONS] --- Verfify redirects within a CSV spreadsheet"
-  opt.separator  "rectory scaffold [OPTIONS]   --- Build a template CSV for testing redirects"
+  opt.separator  "rectory new [OPTIONS]             --- Build a template CSV for testing redirects"
+  opt.separator  "rectory test [CSV FILE] [OPTIONS] --- Test redirects from a CSV spreadsheet"
   opt.separator  ""
   opt.separator  "Options"
 
@@ -28,29 +28,32 @@ opt_parser.parse!
 
 case ARGV[0]
 
-when "scaffold"
-  output = "sample_redirects.csv"
-  output = options[:output] unless options[:output].blank?
-
+when "new"
+  output = "new_rectory_redirects.csv"
+  output = options[:output] unless options[:output].nil?
+  puts "\nGenerating new redirects spreadsheet..."
   CSV.open(output, "wb") do |csv|
     csv << ["url","location","code"]
     csv << ["http://google.com","http://www.google.com",301]
-    csv << ["http://www.google.com","http://www.google.com",200]
+    csv << ["http://www.google.com",nil,200]
   end
-  puts "Scaffolded CSV at: #{output}"
+  puts "\nFinished: #{output}\n"
+
+when "test"
+  output       = "results_#{ARGV[1]}"
+  output       = options[:output] unless options[:output].nil?
+  expectations = []
+  CSV.foreach(ARGV[1]) do |row|
+    expectations << Rectory::Expectation.new(row[0], :location => row[1], :code => row[2].to_i)
+  end
+  expectations.shift
+  puts "\nTesting #{expectations.count.to_s} expectations in #{ARGV[1]}..."
+  results = Rectory.perform expectations
+  Rectory::CsvOutputter.write results, output
+  puts "\nFinished! Report written to #{output}\n"
 
 when "help", nil
   puts opt_parser
 
-else
-  output       = "results_#{ARGV[0]}"
-  output       = options[:output] unless options[:output].nil?
-  expectations = []
-  CSV.foreach(ARGV[0]) do |row|
-    expectations << Rectory::Expectation.new(row[0], :location => row[1], :code => row[2].to_i)
-  end
-  expectations.shift
-  results = Rectory.verify expectations
-  Rectory::CsvOutputter.write results, output
 end
 

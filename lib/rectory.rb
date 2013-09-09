@@ -1,8 +1,7 @@
 require 'rectory/version'
-require 'rectory/verifier'
+require 'rectory/request'
 require 'rectory/csv_outputter'
 require 'rectory/expectation'
-require 'rectory/result'
 
 Celluloid.logger = nil
 
@@ -19,10 +18,10 @@ module Rectory
   # @param expectations [Array] a `Rectory::Expectation` set you're testing
   # @param options [Hash] Celluloid `pool()` options
   # @return [Array] the same set of expectations with result attibutes updated
-  def self.verify(expectations, options = {})
+  def self.perform(expectations, options = {})
     options = DEFAULT_CELLULOID_OPTIONS.merge options
-    pool    = Rectory::Verifier.pool(options)
-    futures = expectations.map { |e| pool.future(:verify, e) }
+    pool    = Rectory::Request.pool(options)
+    futures = expectations.map { |e| pool.future(:perform, e) }
     results = futures.map(&:value)
   end
 end

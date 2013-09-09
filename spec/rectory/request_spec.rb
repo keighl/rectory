@@ -1,33 +1,37 @@
 
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe Rectory::Verifier do
+describe Rectory::Request do
 
-  let(:verifier) {
-    Rectory::Verifier.new
+  let(:request) {
+    Rectory::Request.new
   }
 
-  describe "#verify an expectation" do
+  describe "#perform an expectation" do
 
     describe "with a location redirect" do
 
       let(:expectation) {
-        Rectory::Expectation.new('http://example.com/302/url', :location => 'http://example.com/302/target', :code => 302)
+        Rectory::Expectation.new('http://example.com/302/url', {
+          :location => 'http://example.com/302/target',
+          :code => 302
+        })
       }
 
       before(:each) {
         headers = nil
         headers = { :location => expectation.location }
         stub_request(:get, expectation.url).to_return(:status => expectation.code, :headers => headers)
-        verifier.verify expectation
       }
 
       it "records the response status code to result.code" do
-        expectation.result.location.should eq(expectation.location.to_s)
+        request.perform expectation
+        expectation.result[:location].should eq(expectation.location)
       end
 
-      it "records the response location code to result.location" do
-        expectation.result.location.should eq(expectation.location.to_s)
+      it "records the response location code to result[:location]" do
+        request.perform expectation
+        expectation.result[:location].should eq(expectation.location)
       end
     end
 
@@ -40,15 +44,15 @@ describe Rectory::Verifier do
       before(:each) {
         headers = nil
         stub_request(:get, expectation.url).to_return(:status => expectation.code)
-        verifier.verify expectation
+        request.perform expectation
       }
 
       it "records the response status code to result.code" do
-        expectation.result.location.should eq(expectation.location.to_s)
+        expectation.result[:location].should eq(expectation.location)
       end
 
-      it "records the url to result.location" do
-        expectation.result.location.should eq(expectation.url.to_s)
+      it "records the url to result[:location]" do
+        expectation.result[:location].should be_nil
       end
     end
   end

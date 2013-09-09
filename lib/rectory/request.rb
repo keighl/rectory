@@ -5,14 +5,14 @@ require 'celluloid'
 module Rectory
 
   # Test the expectated results of an HTTP request
-  class Verifier
+  class Request
     include Celluloid
 
     # Test the expectated results of an HTTP request
     #
     # @param expectation [Rectory::Expectation] the expectation you're testing
     # @return [Rectory::Expectation] the same expectation with result attributes updated
-    def verify(expectation)
+    def perform(expectation)
       uri = URI expectation.url
       req = Net::HTTP::Get.new uri.request_uri
 
@@ -20,8 +20,9 @@ module Rectory
         http.request req
       end
 
-      expectation.result.location = res['location'].nil? ? expectation.url : res['location']
-      expectation.result.code     = res.code.to_i
+      expectation.result[:location] = res['location']
+      expectation.result[:code]     = res.code.to_i
+
       return expectation
     end
   end

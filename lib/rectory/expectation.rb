@@ -8,11 +8,6 @@ module Rectory
   # @attr result A Rectory::Result instance which contains HTTP repsonse details
   class Expectation
 
-    EXPECTATION_DEFAULTS = {
-      :location => nil,
-      :code     => 200
-    }
-
     attr_accessor :url, :location, :code, :result
 
     # @param url [String] The URL against which to test an HTTP reponse
@@ -20,19 +15,16 @@ module Rectory
     def initialize(url, args = {})
       raise ArgumentError, "You must provide a URL to test!" if url.nil?
 
-      args = EXPECTATION_DEFAULTS.merge args
+      defaults = {
+        :code   => 200,
+        :result => {}
+      }
 
-      self.url = url
+      args          = defaults.merge args
+      self.url      = url
       self.code     = args[:code].to_i
-      self.location = url
-      self.location = args[:location] unless args[:location].nil?
-
-      if args[:result].nil?
-        self.result = Rectory::Result.new
-      else
-        raise ArgumentError, ":result must be an instance of Rectory::Result" unless args[:result].is_a?(Rectory::Result)
-        self.result = args[:result]
-      end
+      self.result   = args[:result]
+      self.location = args[:location]
     end
 
     # Determines whether the HTTP result satifies the expectations
@@ -41,18 +33,21 @@ module Rectory
     #
     # @return [Boolean]
     def pass?
+      perform if result.empty?
       truths = []
-      truths << (result.location.to_s.gsub(/\/$/, "") == location.to_s.gsub(/\/$/, ""))
-      truths << (result.code == code.to_i) unless code.nil?
+      truths << (result[:location].to_s.gsub(/\/$/, "") == location.to_s.gsub(/\/$/, ""))
+      truths << (result[:code] == code.to_i) unless code.nil?
       truths.all?
     end
 
-    # Run self through Rectory::Verfier#verify
+    private
+
+    # Run self through Rectory::Verfier#perform
     #
     # Updates the `result` attribute
-    def verify
-      v           = Rectory::Verifier.new
-      r           = v.verify self
+    def perform
+      v = Rectory::Request.new
+      r = v.perform self
       nil
     end
   end

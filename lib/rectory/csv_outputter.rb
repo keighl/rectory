@@ -1,7 +1,7 @@
 require 'csv'
 
 module Rectory
-  # Write the results some test to a simple CSV file
+  # Write the results of a test to a simple CSV file
   class CsvOutputter
     # @param results [Array] Rectory::Expectation set (with Rectory::Results)
     # @param output [String] path to the desired output CSV
@@ -10,24 +10,10 @@ module Rectory
     def self.write(results, output, options = {})
 
       CSV.open(output, "wb", options) do |csv|
-        csv << [
-          "url",
-          "location",
-          "code",
-          "result_location",
-          "result_code",
-          "pass"
-        ]
+        csv << ["url","location","code","result_location","result_code","pass"]
 
         results.each do |r|
-          csv << [
-            r.url,
-            r.location,
-            r.code,
-            r.result.location,
-            r.result.code,
-            r.pass?
-          ]
+          csv << [r.url, r.location, r.code, r.result[:location], r.result[:code], r.pass?]
         end
       end
 
