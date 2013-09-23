@@ -1,5 +1,7 @@
 # Rectory
 
+[![Code Climate](https://codeclimate.com/github/keighl/rectory.png)](https://codeclimate.com/github/keighl/rectory)
+
 Quickly test HTTP redirects and status codes.
 
 Have a ton of HTTP redirects, and need to verify they're working? Use this. Give rectory a list of live HTTP expectations, and it'll tell you what happens: status code, location, and whether it behaved as expected (i.e pass/fail).
