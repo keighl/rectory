@@ -2,11 +2,12 @@
 require File.expand_path('../lib/rectory/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Kyle Truscott"]
-  gem.email         = ["keighl@keighl.com"]
-  gem.description   = %q{Quickly test HTTP redirects and status codes.}
-  gem.summary       = %q{HHave a ton of HTTP redirects, and need to verify they're working? Use this. Give rectory a list of live HTTP expectations, and it'll tell you what happens: status code, location, and whether it behaved as expected (i.e pass/fail).}
-  gem.homepage      = "https://github.com/keighl/rectory"
+  gem.authors     = ["Kyle Truscott"]
+  gem.email       = ["keighl@keighl.com"]
+  gem.description = %q{Quickly test HTTP redirects and status codes.}
+  gem.summary     = %q{HHave a ton of HTTP redirects, and need to verify they're working? Use this. Give rectory a list of live HTTP expectations, and it'll tell you what happens: status code, location, and whether it behaved as expected (i.e pass/fail).}
+  gem.homepage    = "https://github.com/keighl/rectory"
+  gem.license     = 'MIT'
 
   gem.files         = [
     "lib/rectory.rb",
